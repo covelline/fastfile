@@ -1,0 +1,36 @@
+# Customise this file, documentation can be found here:
+# https://github.com/fastlane/fastlane/tree/master/fastlane/docs
+# All available actions: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Actions.md
+# can also be listed using the `fastlane actions` command
+
+# This is the minimum version number required.
+# Update this, if you use features of a newer version
+fastlane_version "1.90.0"
+
+skip_docs
+
+def release_note_action_precheck
+  UI.user_error!("Please install log2changelog. https://github.com/covelline/log2changelog") unless system("bundle show | grep log2changelog > /dev/null")
+end
+
+desc "Git のログからリリースノートを作成"
+lane :print_release_note do
+  release_note_action_precheck()
+  release_note()
+end
+
+desc "Git のログからリリースノートを作成して :output_directory に保存する"
+desc "ファイル名は `{:output_directory}/release_note.md` になる"
+lane :output_release_note do |options|
+  release_note_action_precheck()
+  release_note(output_directory: options[:output_directory])
+end
+
+# More information about multiple platforms in fastlane: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Platforms.md
+# All available actions: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Actions.md
+
+# fastlane reports which actions are used
+# No personal data is sent or shared. Learn more at https://github.com/fastlane/enhancer
+
+# vim: ft=ruby
+
